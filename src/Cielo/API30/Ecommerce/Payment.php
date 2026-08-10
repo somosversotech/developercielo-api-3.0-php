@@ -42,6 +42,8 @@ class Payment implements \JsonSerializable
 
     private $debitCard;
 
+    private $externalAuthentication;
+
     private $authenticationUrl;
 
     private $tid;
@@ -159,6 +161,11 @@ class Payment implements \JsonSerializable
         if (isset($data->DebitCard)) {
             $this->debitCard = new CreditCard();
             $this->debitCard->populate($data->DebitCard);
+        }
+
+        if (isset($data->ExternalAuthentication)) {
+            $this->externalAuthentication = new ExternalAuthentication();
+            $this->externalAuthentication->populate($data->ExternalAuthentication);
         }
 
         $this->expirationDate = isset($data->ExpirationDate) ? $data->ExpirationDate : null;
@@ -448,6 +455,28 @@ class Payment implements \JsonSerializable
     /**
      * @return mixed
      */
+    /**
+     * Dados da autenticação 3DS 2.x executada fora do fluxo de autorização.
+     *
+     * @return ExternalAuthentication|null
+     */
+    public function getExternalAuthentication()
+    {
+        return $this->externalAuthentication;
+    }
+
+    /**
+     * @param ExternalAuthentication|null $externalAuthentication
+     *
+     * @return $this
+     */
+    public function setExternalAuthentication($externalAuthentication)
+    {
+        $this->externalAuthentication = $externalAuthentication;
+
+        return $this;
+    }
+
     public function getAuthenticationUrl()
     {
         return $this->authenticationUrl;
